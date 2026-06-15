@@ -6,9 +6,14 @@ import re
 PII_PATTERNS: dict[str, str] = {
     "email": r"[\w\.-]+@[\w\.-]+\.\w+",
     "phone_vn": r"(?:\+84|0)[ \.-]?\d{3}[ \.-]?\d{3}[ \.-]?\d{3,4}", # Matches 090 123 4567, 090.123.4567, etc.
-    "cccd": r"\b\d{12}\b",
+    # 16-digit card must be checked BEFORE the 12-digit cccd so a card number
+    # is not partially redacted as a cccd first.
     "credit_card": r"\b\d{4}[- ]?\d{4}[- ]?\d{4}[- ]?\d{4}\b",
-    # TODO: Add more patterns (e.g., Passport, Vietnamese address keywords)
+    "cccd": r"\b\d{12}\b",
+    # Vietnamese passport: 1 letter followed by 7 digits, e.g. B1234567, C9876543
+    "passport": r"\b[A-Z]\d{7}\b",
+    # Vietnamese street address: "<number> <Vietnamese address keyword> ..."
+    "address": r"\b\d{1,4}\s+(?:[Đđ]ường|[Pp]hố|[Nn]gõ|[Hh]ẻm|[Ss]ố nhà|[Tt]ổ|[Pp]hường|[Qq]uận|[Xx]ã|[Hh]uyện)\b[\w\sÀ-ỹ.,/-]*",
 }
 
 
